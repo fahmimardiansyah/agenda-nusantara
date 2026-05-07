@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
@@ -16,12 +17,20 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState
     extends State<CalendarPage> {
+  DateTime focusedDay = DateTime.now();
+
+  DateTime selectedDay = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     final provider =
         context.watch<TodoProvider>();
 
-    final todos = provider.todos;
+    final filteredTasks =
+        provider.todos.where((todo) {
+      return todo.dueDate ==
+          _formatDate(selectedDay);
+    }).toList();
 
     return Scaffold(
       body: SafeArea(
@@ -35,12 +44,14 @@ class _CalendarPageState
                 CrossAxisAlignment.start,
 
             children: [
+              // =========================
               // HEADER
+              // =========================
               const Text(
-                'Schedule 📅',
+                'Schedule Calendar',
 
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -50,11 +61,10 @@ class _CalendarPageState
               ),
 
               const Text(
-                'Track your upcoming tasks',
+                'Manage your upcoming tasks',
 
                 style: TextStyle(
                   color: AppColors.grey,
-                  fontSize: 15,
                 ),
               ),
 
@@ -62,12 +72,12 @@ class _CalendarPageState
                 height: AppSizes.xxl,
               ),
 
-              // CALENDAR CARD
+              // =========================
+              // CALENDAR
+              // =========================
               Container(
-                width: double.infinity,
-
                 padding: const EdgeInsets.all(
-                  AppSizes.xl,
+                  AppSizes.lg,
                 ),
 
                 decoration: BoxDecoration(
@@ -75,104 +85,126 @@ class _CalendarPageState
 
                   borderRadius:
                       BorderRadius.circular(
-                    32,
+                    30,
                   ),
                 ),
 
-                child: Column(
-                  children: [
-                    // MONTH
-                    Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment
-                              .spaceBetween,
+                child: TableCalendar(
+                  focusedDay: focusedDay,
 
-                      children: [
-                        const Text(
-                          'May 2026',
+                  firstDay:
+                      DateTime(2020),
 
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight:
-                                FontWeight.bold,
-                          ),
-                        ),
+                  lastDay:
+                      DateTime(2035),
 
-                        Container(
-                          padding:
-                              const EdgeInsets.all(
-                            10,
-                          ),
+                  selectedDayPredicate:
+                      (day) {
+                    return isSameDay(
+                      selectedDay,
+                      day,
+                    );
+                  },
 
-                          decoration:
-                              BoxDecoration(
-                            color: AppColors
-                                .primary
-                                .withOpacity(
-                                  0.15,
-                                ),
+                  onDaySelected:
+                      (selected, focused) {
+                    setState(() {
+                      selectedDay =
+                          selected;
 
-                            borderRadius:
-                                BorderRadius.circular(
-                              14,
-                            ),
-                          ),
+                      focusedDay =
+                          focused;
+                    });
+                  },
 
-                          child: const Icon(
-                            Icons
-                                .calendar_month_rounded,
+                  calendarStyle:
+                      CalendarStyle(
+                    todayDecoration:
+                        BoxDecoration(
+                      color: AppColors
+                          .primary
+                          .withOpacity(0.4),
 
-                            color:
-                                AppColors
-                                    .primary,
-                          ),
-                        ),
-                      ],
+                      shape:
+                          BoxShape.circle,
                     ),
 
-                    const SizedBox(
-                      height: AppSizes.xxl,
+                    selectedDecoration:
+                        const BoxDecoration(
+                      color:
+                          AppColors.primary,
+
+                      shape:
+                          BoxShape.circle,
                     ),
 
-                    // DAYS
-                    Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment
-                              .spaceBetween,
-
-                      children: [
-                        _buildDay(
-                          'MON',
-                          '12',
-                          false,
-                        ),
-
-                        _buildDay(
-                          'TUE',
-                          '13',
-                          false,
-                        ),
-
-                        _buildDay(
-                          'WED',
-                          '14',
-                          true,
-                        ),
-
-                        _buildDay(
-                          'THU',
-                          '15',
-                          false,
-                        ),
-
-                        _buildDay(
-                          'FRI',
-                          '16',
-                          false,
-                        ),
-                      ],
+                    defaultTextStyle:
+                        const TextStyle(
+                      color:
+                          AppColors.white,
                     ),
-                  ],
+
+                    weekendTextStyle:
+                        const TextStyle(
+                      color:
+                          AppColors.white,
+                    ),
+
+                    outsideTextStyle:
+                        TextStyle(
+                      color: AppColors
+                          .grey
+                          .withOpacity(0.5),
+                    ),
+                  ),
+
+                  headerStyle:
+                      const HeaderStyle(
+                    formatButtonVisible:
+                        false,
+
+                    titleTextStyle:
+                        TextStyle(
+                      color:
+                          AppColors.white,
+
+                      fontSize: 18,
+
+                      fontWeight:
+                          FontWeight.bold,
+                    ),
+
+                    leftChevronIcon:
+                        Icon(
+                      Icons
+                          .chevron_left_rounded,
+                      color:
+                          AppColors.white,
+                    ),
+
+                    rightChevronIcon:
+                        Icon(
+                      Icons
+                          .chevron_right_rounded,
+                      color:
+                          AppColors.white,
+                    ),
+                  ),
+
+                  daysOfWeekStyle:
+                      const DaysOfWeekStyle(
+                    weekdayStyle:
+                        TextStyle(
+                      color:
+                          AppColors.grey,
+                    ),
+
+                    weekendStyle:
+                        TextStyle(
+                      color:
+                          AppColors.grey,
+                    ),
+                  ),
                 ),
               ),
 
@@ -180,13 +212,16 @@ class _CalendarPageState
                 height: AppSizes.xxl,
               ),
 
-              // UPCOMING
-              const Text(
-                'Upcoming Tasks',
+              // =========================
+              // TASK SECTION
+              // =========================
+              Text(
+                'Tasks on ${_formatDate(selectedDay)}',
 
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight:
+                      FontWeight.bold,
                 ),
               ),
 
@@ -194,146 +229,141 @@ class _CalendarPageState
                 height: AppSizes.lg,
               ),
 
-              todos.isEmpty
-                  ? Container(
-                      width: double.infinity,
+              // EMPTY
+              if (filteredTasks.isEmpty)
+                Container(
+                  width: double.infinity,
 
-                      padding:
-                          const EdgeInsets.all(
-                        AppSizes.xl,
+                  padding:
+                      const EdgeInsets.all(
+                    AppSizes.lg,
+                  ),
+
+                  decoration: BoxDecoration(
+                    color: AppColors.card,
+
+                    borderRadius:
+                        BorderRadius.circular(
+                      24,
+                    ),
+                  ),
+
+                  child: const Text(
+                    'No tasks on this date',
+
+                    style: TextStyle(
+                      color: AppColors.grey,
+                    ),
+                  ),
+                ),
+
+              // TASK LIST
+              ...filteredTasks.map(
+                (todo) {
+                  final isImportant =
+                      todo.category ==
+                          'important';
+
+                  return Container(
+                    margin:
+                        const EdgeInsets.only(
+                      bottom: AppSizes.md,
+                    ),
+
+                    padding:
+                        const EdgeInsets.all(
+                      AppSizes.lg,
+                    ),
+
+                    decoration: BoxDecoration(
+                      color: AppColors.card,
+
+                      borderRadius:
+                          BorderRadius.circular(
+                        24,
                       ),
+                    ),
 
-                      decoration: BoxDecoration(
-                        color: AppColors.card,
-
-                        borderRadius:
-                            BorderRadius.circular(
-                          24,
-                        ),
-                      ),
-
-                      child: const Column(
-                        children: [
-                          Icon(
-                            Icons.event_busy,
-                            color:
-                                AppColors.grey,
-                            size: 50,
-                          ),
-
-                          SizedBox(height: 16),
-
-                          Text(
-                            'No schedule available',
-
-                            style: TextStyle(
-                              color:
-                                  AppColors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : Column(
-                      children:
-                          todos.map((todo) {
-                        final isImportant =
-                            todo.category ==
-                                'important';
-
-                        return Container(
-                          margin:
-                              const EdgeInsets.only(
-                            bottom:
-                                AppSizes.md,
-                          ),
-
-                          padding:
-                              const EdgeInsets.all(
-                            AppSizes.lg,
-                          ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 14,
+                          height: 14,
 
                           decoration:
                               BoxDecoration(
-                            color:
-                                AppColors.card,
+                            color: isImportant
+                                ? AppColors
+                                    .danger
+                                : AppColors
+                                    .primary,
 
-                            borderRadius:
-                                BorderRadius.circular(
-                              24,
-                            ),
+                            shape:
+                                BoxShape.circle,
                           ),
+                        ),
 
-                          child: Row(
+                        const SizedBox(
+                          width: AppSizes.md,
+                        ),
+
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment:
+                                CrossAxisAlignment
+                                    .start,
+
                             children: [
-                              Container(
-                                width: 14,
-                                height: 60,
+                              Text(
+                                todo.title,
 
-                                decoration:
-                                    BoxDecoration(
-                                  color: isImportant
-                                      ? AppColors
-                                          .danger
-                                      : AppColors
-                                          .primary,
-
-                                  borderRadius:
-                                      BorderRadius.circular(
-                                    20,
-                                  ),
+                                style:
+                                    const TextStyle(
+                                  fontWeight:
+                                      FontWeight
+                                          .bold,
                                 ),
                               ),
 
                               const SizedBox(
-                                width:
-                                    AppSizes.md,
+                                height: 4,
                               ),
 
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment
-                                          .start,
+                              Text(
+                                todo.description,
 
-                                  children: [
-                                    Text(
-                                      todo.title,
+                                style:
+                                    const TextStyle(
+                                  color:
+                                      AppColors
+                                          .grey,
 
-                                      style:
-                                          const TextStyle(
-                                        fontSize:
-                                            18,
-
-                                        fontWeight:
-                                            FontWeight
-                                                .bold,
-                                      ),
-                                    ),
-
-                                    const SizedBox(
-                                      height: 6,
-                                    ),
-
-                                    Text(
-                                      todo
-                                          .dueDate,
-
-                                      style:
-                                          const TextStyle(
-                                        color:
-                                            AppColors
-                                                .grey,
-                                      ),
-                                    ),
-                                  ],
+                                  fontSize: 12,
                                 ),
                               ),
                             ],
                           ),
-                        );
-                      }).toList(),
+                        ),
+
+                        Icon(
+                          todo.isDone == 1
+                              ? Icons
+                                  .check_circle
+                              : Icons
+                                  .hourglass_bottom_rounded,
+
+                          color:
+                              todo.isDone == 1
+                                  ? AppColors
+                                      .success
+                                  : AppColors
+                                      .secondary,
+                        ),
+                      ],
                     ),
+                  );
+                },
+              ),
 
               const SizedBox(
                 height: 120,
@@ -345,59 +375,27 @@ class _CalendarPageState
     );
   }
 
-  // DAY WIDGET
-  Widget _buildDay(
-    String day,
-    String date,
-    bool selected,
+  // =========================
+  // FORMAT DATE
+  // =========================
+  String _formatDate(
+    DateTime date,
   ) {
-    return Container(
-      width: 56,
-      height: 90,
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
 
-      decoration: BoxDecoration(
-        color: selected
-            ? AppColors.primary
-            : AppColors.background,
-
-        borderRadius:
-            BorderRadius.circular(22),
-      ),
-
-      child: Column(
-        mainAxisAlignment:
-            MainAxisAlignment.center,
-
-        children: [
-          Text(
-            day,
-
-            style: TextStyle(
-              color: selected
-                  ? Colors.white70
-                  : AppColors.grey,
-
-              fontSize: 12,
-            ),
-          ),
-
-          const SizedBox(height: 10),
-
-          Text(
-            date,
-
-            style: TextStyle(
-              color: selected
-                  ? Colors.white
-                  : AppColors.white,
-
-              fontSize: 22,
-
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
+    return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
 }

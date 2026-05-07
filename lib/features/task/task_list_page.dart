@@ -110,6 +110,7 @@ class _TaskListPageState
                           context,
                         ).showSnackBar(
                           const SnackBar(
+                            behavior: SnackBarBehavior.floating,
                             content: Text(
                               'Task deleted',
                             ),

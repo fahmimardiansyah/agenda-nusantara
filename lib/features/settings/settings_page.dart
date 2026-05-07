@@ -7,6 +7,7 @@ import '../../core/widgets/custom_button.dart';
 import '../../core/widgets/custom_textfield.dart';
 
 import '../../data/services/auth_service.dart';
+import '../auth/login_page.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -38,6 +39,7 @@ class _SettingsPageState
         newPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
+          behavior: SnackBarBehavior.floating,
           content: Text(
             'All fields are required',
           ),
@@ -159,6 +161,63 @@ class _SettingsPageState
               icon: Icons.save_rounded,
 
               onPressed: changePassword,
+            ),
+
+            // LOGOUT BUTTON
+            SizedBox(
+              width: double.infinity,
+
+              child: ElevatedButton.icon(
+                onPressed: () async {
+                  await AuthService.logout();
+
+                  if (!mounted) return;
+
+                  Navigator.pushAndRemoveUntil(
+                    context,
+
+                    MaterialPageRoute(
+                      builder:
+                          (_) => const LoginPage(),
+                    ),
+
+                    (route) => false,
+                  );
+                },
+
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      AppColors.danger,
+
+                  foregroundColor:
+                      Colors.white,
+
+                  padding:
+                      const EdgeInsets.symmetric(
+                    vertical: 18,
+                  ),
+
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(
+                      18,
+                    ),
+                  ),
+                ),
+
+                icon: const Icon(
+                  Icons.logout_rounded,
+                ),
+
+                label: const Text(
+                  'Logout',
+
+                  style: TextStyle(
+                    fontWeight:
+                        FontWeight.bold,
+                  ),
+                ),
+              ),
             ),
 
             const SizedBox(

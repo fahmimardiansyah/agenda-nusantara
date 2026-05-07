@@ -95,6 +95,7 @@ class _AddTaskPageState
         selectedDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
+          behavior: SnackBarBehavior.floating,
           content: Text(
             'All fields are required',
           ),
