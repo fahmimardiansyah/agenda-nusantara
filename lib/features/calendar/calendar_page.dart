@@ -33,6 +33,9 @@ class _CalendarPageState
     }).toList();
 
     return Scaffold(
+            appBar: AppBar(
+        title: const Text('Calendar'),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(

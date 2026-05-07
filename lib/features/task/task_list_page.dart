@@ -12,12 +12,10 @@ class TaskListPage extends StatefulWidget {
   const TaskListPage({super.key});
 
   @override
-  State<TaskListPage> createState() =>
-      _TaskListPageState();
+  State<TaskListPage> createState() => _TaskListPageState();
 }
 
-class _TaskListPageState
-    extends State<TaskListPage> {
+class _TaskListPageState extends State<TaskListPage> {
   @override
   void initState() {
     super.initState();
@@ -29,12 +27,14 @@ class _TaskListPageState
 
   @override
   Widget build(BuildContext context) {
-    final provider =
-        context.watch<TodoProvider>();
+    final provider = context.watch<TodoProvider>();
 
     final todos = provider.todos;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Your Tasks'),
+      ),
       body: SafeArea(
         child: todos.isEmpty
             ? _buildEmptyState()
@@ -48,72 +48,46 @@ class _TaskListPageState
 
                 itemCount: todos.length,
 
-                itemBuilder:
-                    (context, index) {
+                itemBuilder: (context, index) {
                   final todo = todos[index];
 
-                  final isImportant =
-                      todo.category ==
-                          'important';
+                  final isImportant = todo.category == 'important';
 
                   return Padding(
-                    padding:
-                        const EdgeInsets.only(
-                      bottom: AppSizes.lg,
-                    ),
+                    padding: const EdgeInsets.only(bottom: AppSizes.lg),
 
                     child: Dismissible(
-                      key: Key(
-                        todo.id.toString(),
-                      ),
+                      key: Key(todo.id.toString()),
 
-                      direction:
-                          DismissDirection
-                              .endToStart,
+                      direction: DismissDirection.endToStart,
 
                       background: Container(
-                        alignment:
-                            Alignment.centerRight,
+                        alignment: Alignment.centerRight,
 
-                        padding:
-                            const EdgeInsets.symmetric(
-                          horizontal: 24,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
 
                         decoration: BoxDecoration(
-                          color:
-                              AppColors.danger,
+                          color: AppColors.danger,
 
-                          borderRadius:
-                              BorderRadius.circular(
-                            28,
-                          ),
+                          borderRadius: BorderRadius.circular(28),
                         ),
 
                         child: const Icon(
-                          Icons
-                              .delete_rounded,
+                          Icons.delete_rounded,
                           color: Colors.white,
                           size: 30,
                         ),
                       ),
 
                       onDismissed: (_) async {
-                        await provider
-                            .deleteTodo(
-                          todo.id!,
-                        );
+                        await provider.deleteTodo(todo.id!);
 
                         if (!mounted) return;
 
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             behavior: SnackBarBehavior.floating,
-                            content: Text(
-                              'Task deleted',
-                            ),
+                            content: Text('Task deleted'),
                           ),
                         );
                       },
@@ -124,48 +98,26 @@ class _TaskListPageState
                             context,
 
                             MaterialPageRoute(
-                              builder:
-                                  (_) => AddTaskPage(
-                                    todo: todo,
-                                  ),
+                              builder: (_) => AddTaskPage(todo: todo),
                             ),
                           );
                         },
 
                         child: AnimatedContainer(
-                          duration:
-                              const Duration(
-                            milliseconds: 250,
-                          ),
+                          duration: const Duration(milliseconds: 250),
 
-                          padding:
-                              const EdgeInsets.all(
-                            AppSizes.lg,
-                          ),
+                          padding: const EdgeInsets.all(AppSizes.lg),
 
-                          decoration:
-                              BoxDecoration(
-                            color:
-                                AppColors.card,
+                          decoration: BoxDecoration(
+                            color: AppColors.card,
 
-                            borderRadius:
-                                BorderRadius.circular(
-                              30,
-                            ),
+                            borderRadius: BorderRadius.circular(30),
 
                             boxShadow: [
                               BoxShadow(
                                 color: isImportant
-                                    ? AppColors
-                                        .danger
-                                        .withOpacity(
-                                          0.08,
-                                        )
-                                    : AppColors
-                                        .primary
-                                        .withOpacity(
-                                          0.08,
-                                        ),
+                                    ? AppColors.danger.withOpacity(0.08)
+                                    : AppColors.primary.withOpacity(0.08),
 
                                 blurRadius: 18,
                                 spreadRadius: 1,
@@ -174,91 +126,56 @@ class _TaskListPageState
                           ),
 
                           child: Row(
-                            crossAxisAlignment:
-                                CrossAxisAlignment
-                                    .start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
 
                             children: [
                               // CHECKBOX
                               GestureDetector(
                                 onTap: () async {
-                                  await provider
-                                      .updateTodoStatus(
+                                  await provider.updateTodoStatus(
                                     todo.id!,
-                                    todo.isDone ==
-                                            1
-                                        ? 0
-                                        : 1,
+                                    todo.isDone == 1 ? 0 : 1,
                                   );
                                 },
 
-                                child:
-                                    AnimatedContainer(
-                                  duration:
-                                      const Duration(
-                                    milliseconds:
-                                        200,
-                                  ),
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
 
                                   width: 30,
                                   height: 30,
 
-                                  decoration:
-                                      BoxDecoration(
-                                    color:
-                                        todo.isDone ==
-                                                1
-                                            ? AppColors
-                                                .success
-                                            : Colors
-                                                .transparent,
+                                  decoration: BoxDecoration(
+                                    color: todo.isDone == 1
+                                        ? AppColors.success
+                                        : Colors.transparent,
 
-                                    border:
-                                        Border.all(
-                                      color:
-                                          todo.isDone ==
-                                                  1
-                                              ? AppColors
-                                                  .success
-                                              : AppColors
-                                                  .grey,
+                                    border: Border.all(
+                                      color: todo.isDone == 1
+                                          ? AppColors.success
+                                          : AppColors.grey,
 
                                       width: 2,
                                     ),
 
-                                    borderRadius:
-                                        BorderRadius.circular(
-                                      12,
-                                    ),
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
 
-                                  child:
-                                      todo.isDone ==
-                                              1
-                                          ? const Icon(
-                                              Icons
-                                                  .check_rounded,
-                                              color:
-                                                  Colors
-                                                      .white,
-                                              size:
-                                                  18,
-                                            )
-                                          : null,
+                                  child: todo.isDone == 1
+                                      ? const Icon(
+                                          Icons.check_rounded,
+                                          color: Colors.white,
+                                          size: 18,
+                                        )
+                                      : null,
                                 ),
                               ),
 
-                              const SizedBox(
-                                width:
-                                    AppSizes.md,
-                              ),
+                              const SizedBox(width: AppSizes.md),
 
                               // CONTENT
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment
-                                          .start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
 
                                   children: [
                                     // TOP ROW
@@ -266,45 +183,32 @@ class _TaskListPageState
                                       children: [
                                         Expanded(
                                           child: Text(
-                                            todo
-                                                .title,
+                                            todo.title,
 
-                                            style:
-                                                TextStyle(
-                                              fontSize:
-                                                  17,
+                                            style: TextStyle(
+                                              fontSize: 17,
 
-                                              fontWeight:
-                                                  FontWeight
-                                                      .bold,
+                                              fontWeight: FontWeight.bold,
 
-                                              decoration:
-                                                  todo.isDone ==
-                                                          1
-                                                      ? TextDecoration.lineThrough
-                                                      : null,
+                                              decoration: todo.isDone == 1
+                                                  ? TextDecoration.lineThrough
+                                                  : null,
 
-                                              color:
-                                                  todo.isDone ==
-                                                          1
-                                                      ? AppColors.grey
-                                                      : AppColors.white,
+                                              color: todo.isDone == 1
+                                                  ? AppColors.grey
+                                                  : AppColors.white,
                                             ),
                                           ),
                                         ),
 
                                         Container(
-                                          padding:
-                                              const EdgeInsets.symmetric(
-                                            horizontal:
-                                                14,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 14,
 
-                                            vertical:
-                                                8,
+                                            vertical: 8,
                                           ),
 
-                                          decoration:
-                                              BoxDecoration(
+                                          decoration: BoxDecoration(
                                             color: isImportant
                                                 ? AppColors.danger.withOpacity(
                                                     0.15,
@@ -313,83 +217,61 @@ class _TaskListPageState
                                                     0.15,
                                                   ),
 
-                                            borderRadius:
-                                                BorderRadius.circular(
+                                            borderRadius: BorderRadius.circular(
                                               14,
                                             ),
                                           ),
 
-                                          child:
-                                              Text(
+                                          child: Text(
                                             isImportant
                                                 ? 'Important'
                                                 : 'Regular',
 
-                                            style:
-                                                TextStyle(
+                                            style: TextStyle(
                                               color: isImportant
                                                   ? AppColors.danger
                                                   : AppColors.primary,
 
-                                              fontSize:
-                                                  12,
+                                              fontSize: 12,
 
-                                              fontWeight:
-                                                  FontWeight.bold,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                         ),
                                       ],
                                     ),
 
-                                    const SizedBox(
-                                      height:
-                                          AppSizes.md,
-                                    ),
+                                    const SizedBox(height: AppSizes.md),
 
                                     // DESCRIPTION
                                     Text(
-                                      todo
-                                          .description,
+                                      todo.description,
 
-                                      style:
-                                          const TextStyle(
-                                        color:
-                                            AppColors
-                                                .grey,
+                                      style: const TextStyle(
+                                        color: AppColors.grey,
 
                                         height: 1.5,
                                       ),
                                     ),
 
-                                    const SizedBox(
-                                      height:
-                                          AppSizes.lg,
-                                    ),
+                                    const SizedBox(height: AppSizes.lg),
 
                                     // FOOTER
                                     Row(
                                       children: [
                                         Container(
-                                          padding:
-                                              const EdgeInsets.symmetric(
-                                            horizontal:
-                                                12,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
 
-                                            vertical:
-                                                8,
+                                            vertical: 8,
                                           ),
 
-                                          decoration:
-                                              BoxDecoration(
-                                            color: Colors
-                                                .white
-                                                .withOpacity(
-                                                  0.04,
-                                                ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white.withOpacity(
+                                              0.04,
+                                            ),
 
-                                            borderRadius:
-                                                BorderRadius.circular(
+                                            borderRadius: BorderRadius.circular(
                                               14,
                                             ),
                                           ),
@@ -397,33 +279,22 @@ class _TaskListPageState
                                           child: Row(
                                             children: [
                                               const Icon(
-                                                Icons
-                                                    .calendar_month_rounded,
+                                                Icons.calendar_month_rounded,
 
-                                                size:
-                                                    16,
+                                                size: 16,
 
-                                                color:
-                                                    AppColors
-                                                        .grey,
+                                                color: AppColors.grey,
                                               ),
 
-                                              const SizedBox(
-                                                width:
-                                                    8,
-                                              ),
+                                              const SizedBox(width: 8),
 
                                               Text(
-                                                todo
-                                                    .dueDate,
+                                                todo.dueDate,
 
-                                                style:
-                                                    const TextStyle(
-                                                  color:
-                                                      AppColors.grey,
+                                                style: const TextStyle(
+                                                  color: AppColors.grey,
 
-                                                  fontSize:
-                                                      12,
+                                                  fontSize: 12,
                                                 ),
                                               ),
                                             ],
@@ -433,18 +304,13 @@ class _TaskListPageState
                                         const Spacer(),
 
                                         Icon(
-                                          todo.isDone ==
-                                                  1
-                                              ? Icons
-                                                  .task_alt_rounded
-                                              : Icons
-                                                  .hourglass_bottom_rounded,
+                                          todo.isDone == 1
+                                              ? Icons.task_alt_rounded
+                                              : Icons.hourglass_bottom_rounded,
 
-                                          color:
-                                              todo.isDone ==
-                                                      1
-                                                  ? AppColors.success
-                                                  : AppColors.secondary,
+                                          color: todo.isDone == 1
+                                              ? AppColors.success
+                                              : AppColors.secondary,
                                         ),
                                       ],
                                     ),
@@ -469,13 +335,10 @@ class _TaskListPageState
   Widget _buildEmptyState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(
-          AppSizes.xl,
-        ),
+        padding: const EdgeInsets.all(AppSizes.xl),
 
         child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
 
           children: [
             Container(
@@ -485,10 +348,7 @@ class _TaskListPageState
               decoration: BoxDecoration(
                 color: AppColors.card,
 
-                borderRadius:
-                    BorderRadius.circular(
-                  32,
-                ),
+                borderRadius: BorderRadius.circular(32),
               ),
 
               child: const Icon(
@@ -498,32 +358,22 @@ class _TaskListPageState
               ),
             ),
 
-            const SizedBox(
-              height: AppSizes.xl,
-            ),
+            const SizedBox(height: AppSizes.xl),
 
             const Text(
               'No Tasks Yet',
 
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
-            const SizedBox(
-              height: AppSizes.sm,
-            ),
+            const SizedBox(height: AppSizes.sm),
 
             const Text(
               'Tap the + button to create your first productivity task.',
 
               textAlign: TextAlign.center,
 
-              style: TextStyle(
-                color: AppColors.grey,
-                height: 1.5,
-              ),
+              style: TextStyle(color: AppColors.grey, height: 1.5),
             ),
           ],
         ),

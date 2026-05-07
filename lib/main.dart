@@ -6,6 +6,7 @@ import 'features/auth/login_page.dart';
 import 'data/services/auth_service.dart';
 import 'package:provider/provider.dart';
 import 'providers/todo_provider.dart';
+import 'features/splash/splash_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Agenda Nusantara',
         theme: AppTheme.darkTheme,
-        home: const LoginPage(),
+        home: const SplashPage(),
       ),
     );
   }

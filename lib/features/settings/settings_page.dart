@@ -13,68 +13,47 @@ class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
   @override
-  State<SettingsPage> createState() =>
-      _SettingsPageState();
+  State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _SettingsPageState
-    extends State<SettingsPage> {
-  final oldPasswordController =
-      TextEditingController();
+class _SettingsPageState extends State<SettingsPage> {
+  final oldPasswordController = TextEditingController();
 
-  final newPasswordController =
-      TextEditingController();
+  final newPasswordController = TextEditingController();
 
   // =========================
   // CHANGE PASSWORD
   // =========================
   Future<void> changePassword() async {
-    final oldPassword =
-        oldPasswordController.text.trim();
+    final oldPassword = oldPasswordController.text.trim();
 
-    final newPassword =
-        newPasswordController.text.trim();
+    final newPassword = newPasswordController.text.trim();
 
-    if (oldPassword.isEmpty ||
-        newPassword.isEmpty) {
+    if (oldPassword.isEmpty || newPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           behavior: SnackBarBehavior.floating,
-          content: Text(
-            'All fields are required',
-          ),
+          content: Text('All fields are required'),
         ),
       );
 
       return;
     }
 
-    final success =
-        await AuthService.changePassword(
-      oldPassword,
-      newPassword,
-    );
+    final success = await AuthService.changePassword(oldPassword, newPassword);
 
     if (!mounted) return;
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Password updated successfully',
-          ),
-        ),
+        const SnackBar(content: Text('Password updated successfully')),
       );
 
       oldPasswordController.clear();
       newPasswordController.clear();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Current password is incorrect',
-          ),
-        ),
+        const SnackBar(content: Text('Current password is incorrect')),
       );
     }
   }
@@ -82,77 +61,55 @@ class _SettingsPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
+      appBar: AppBar(title: const Text('Settings')),
 
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(
-          AppSizes.lg,
-        ),
+        padding: const EdgeInsets.all(AppSizes.lg),
 
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
             // TITLE
             const Text(
               'Change Password',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
-            const SizedBox(
-              height: AppSizes.sm,
-            ),
+            const SizedBox(height: AppSizes.sm),
 
             const Text(
               'Update your account password securely',
-              style: TextStyle(
-                color: AppColors.grey,
-              ),
+              style: TextStyle(color: AppColors.grey),
             ),
 
-            const SizedBox(
-              height: AppSizes.xl,
-            ),
+            const SizedBox(height: AppSizes.xl),
 
             // OLD PASSWORD
             CustomTextField(
               hintText: 'Current Password',
 
-              controller:
-                  oldPasswordController,
+              controller: oldPasswordController,
 
-              prefixIcon:
-                  Icons.lock_outline_rounded,
+              prefixIcon: Icons.lock_outline_rounded,
 
               obscureText: true,
             ),
 
-            const SizedBox(
-              height: AppSizes.md,
-            ),
+            const SizedBox(height: AppSizes.md),
 
             // NEW PASSWORD
             CustomTextField(
               hintText: 'New Password',
 
-              controller:
-                  newPasswordController,
+              controller: newPasswordController,
 
-              prefixIcon:
-                  Icons.lock_reset_rounded,
+              prefixIcon: Icons.lock_reset_rounded,
 
               obscureText: true,
             ),
 
-            const SizedBox(
-              height: AppSizes.xl,
-            ),
+            const SizedBox(height: AppSizes.xl),
 
             // BUTTON
             CustomButton(
@@ -162,6 +119,8 @@ class _SettingsPageState
 
               onPressed: changePassword,
             ),
+
+            const SizedBox(height: AppSizes.md),
 
             // LOGOUT BUTTON
             SizedBox(
@@ -176,69 +135,46 @@ class _SettingsPageState
                   Navigator.pushAndRemoveUntil(
                     context,
 
-                    MaterialPageRoute(
-                      builder:
-                          (_) => const LoginPage(),
-                    ),
+                    MaterialPageRoute(builder: (_) => const LoginPage()),
 
                     (route) => false,
                   );
                 },
 
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      AppColors.danger,
+                  backgroundColor: AppColors.danger,
 
-                  foregroundColor:
-                      Colors.white,
+                  foregroundColor: Colors.white,
 
-                  padding:
-                      const EdgeInsets.symmetric(
-                    vertical: 18,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 18),
 
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(
-                      18,
-                    ),
+                    borderRadius: BorderRadius.circular(18),
                   ),
                 ),
 
-                icon: const Icon(
-                  Icons.logout_rounded,
-                ),
+                icon: const Icon(Icons.logout_rounded),
 
                 label: const Text(
                   'Logout',
 
-                  style: TextStyle(
-                    fontWeight:
-                        FontWeight.bold,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
             ),
 
-            const SizedBox(
-              height: AppSizes.xxl,
-            ),
+            const SizedBox(height: AppSizes.xxl),
 
             // DEVELOPER CARD
             Container(
               width: double.infinity,
 
-              padding: const EdgeInsets.all(
-                AppSizes.lg,
-              ),
+              padding: const EdgeInsets.all(AppSizes.lg),
 
               decoration: BoxDecoration(
                 color: AppColors.card,
 
-                borderRadius:
-                    BorderRadius.circular(
-                  AppSizes.cardRadius,
-                ),
+                borderRadius: BorderRadius.circular(AppSizes.cardRadius),
               ),
 
               child: Column(
@@ -247,8 +183,7 @@ class _SettingsPageState
                   CircleAvatar(
                     radius: 45,
 
-                    backgroundColor:
-                        AppColors.primary,
+                    backgroundColor: AppColors.primary,
 
                     child: const Icon(
                       Icons.person_rounded,
@@ -257,44 +192,30 @@ class _SettingsPageState
                     ),
                   ),
 
-                  const SizedBox(
-                    height: AppSizes.lg,
-                  ),
+                  const SizedBox(height: AppSizes.lg),
 
                   // NAME
                   const Text(
                     'Fahmi Mardiansyah',
 
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight:
-                          FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
 
-                  const SizedBox(
-                    height: AppSizes.xs,
-                  ),
+                  const SizedBox(height: AppSizes.xs),
 
                   // NIM
                   const Text(
                     'Politeknik Negeri Malang',
 
-                    style: TextStyle(
-                      color: AppColors.grey,
-                    ),
+                    style: TextStyle(color: AppColors.grey),
                   ),
 
-                  const SizedBox(
-                    height: AppSizes.xs,
-                  ),
+                  const SizedBox(height: AppSizes.xs),
 
                   const Text(
-                    'UI/UX & Front-End Developer',
+                    'APP Developer',
 
-                    style: TextStyle(
-                      color: AppColors.grey,
-                    ),
+                    style: TextStyle(color: AppColors.grey),
                   ),
                 ],
               ),
