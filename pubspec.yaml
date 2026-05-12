@@ -54,7 +54,7 @@ flutter_launcher_icons:
   android: true
   ios: true
 
-  image_path: "assets/icons/logo-agendanus.png"
+  image_path: "assets/icons/logo-round-agendanus.png"
 
   adaptive_icon_background: "#000000"
 

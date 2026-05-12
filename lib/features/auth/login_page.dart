@@ -2,155 +2,256 @@ import 'package:flutter/material.dart';
 
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
+
 import '../../core/widgets/custom_button.dart';
 import '../../core/widgets/custom_textfield.dart';
-import '../navigation/main_navigation_page.dart';
+
+import '../../core/utils/app_page_transition.dart';
+
 import '../../data/services/auth_service.dart';
+
+import '../navigation/main_navigation_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginPage> createState() =>
+      _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+class _LoginPageState
+    extends State<LoginPage> {
+  final usernameController =
+      TextEditingController();
+
+  final passwordController =
+      TextEditingController();
 
   Future<void> login() async {
-  final username = usernameController.text.trim();
-  final password = passwordController.text.trim();
+    final username =
+        usernameController.text.trim();
 
-  final success = await AuthService.login(
-    username,
-    password,
-  );
+    final password =
+        passwordController.text.trim();
 
-  if (success) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const MainNavigationPage(),
-      ),
+    final success =
+        await AuthService.login(
+      username,
+      password,
     );
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          'Username atau password salah',
+
+    if (success) {
+      if (!mounted) return;
+
+      Navigator.pushReplacement(
+        context,
+
+        AppPageTransition(
+          page:
+              const MainNavigationPage(),
         ),
-      ),
-    );
+      );
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Username atau password salah',
+          ),
+        ),
+      );
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(AppSizes.lg),
+      backgroundColor:
+          AppColors.background,
 
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      body: Stack(
+        children: [
+          // =========================
+          // BACKGROUND IMAGE
+          // =========================
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/login-bg.jpg',
 
-            children: [
-              const Spacer(),
+              fit: BoxFit.cover,
+            ),
+          ),
 
-              // LOGO
-              Center(
-                child: Container(
-                  width: 110,
-                  height: 110,
+          // =========================
+          // DARK OVERLAY
+          // =========================
+          Positioned.fill(
+            child: Container(
+              color:
+                  Colors.black.withOpacity(
+                0.45,
+              ),
+            ),
+          ),
 
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color(0xFF8B5CF6),
-                        Color(0xFF6D28D9),
-                      ],
-                    ),
-
-                    borderRadius: BorderRadius.circular(32),
-
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primary.withOpacity(0.4),
-                        blurRadius: 30,
-                        spreadRadius: 5,
-                      ),
-                    ],
-                  ),
-
-                  child: const Icon(
-                    Icons.task_alt_rounded,
-                    color: Colors.white,
-                    size: 50,
-                  ),
-                ),
+          // =========================
+          // CONTENT
+          // =========================
+          SafeArea(
+            child: SingleChildScrollView(
+              padding:
+                  const EdgeInsets.all(
+                AppSizes.xl,
               ),
 
-              const SizedBox(height: AppSizes.xl),
+              child: SizedBox(
+                height:
+                    MediaQuery.of(
+                      context,
+                    ).size.height *
+                    0.9,
 
-              // TITLE
-              const Center(
                 child: Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment
+                          .start,
+
                   children: [
-                    Text(
-                      'Agenda Nusantara',
+                    const Spacer(),
+
+                    // =========================
+                    // TITLE
+                    // =========================
+                    const Text(
+                      'Agenda\nNusantara',
+
                       style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.white,
+                        fontSize: 42,
+                        fontWeight:
+                            FontWeight
+                                .bold,
+
+                        height: 1.1,
                       ),
                     ),
 
-                    SizedBox(height: AppSizes.sm),
+                    const SizedBox(
+                      height: AppSizes.md,
+                    ),
 
-                    Text(
-                      'Organize your daily productivity',
+                    const Text(
+                      'Modern productivity app with futuristic experience 🚀',
+
                       style: TextStyle(
-                        color: AppColors.grey,
-                        fontSize: 14,
+                        color:
+                            Colors.white70,
+
+                        fontSize: 15,
                       ),
                     ),
+
+                    const SizedBox(
+                      height: 50,
+                    ),
+
+                    // =========================
+                    // LOGIN CARD
+                    // =========================
+                    Container(
+                      padding:
+                          const EdgeInsets.all(
+                        AppSizes.xl,
+                      ),
+
+                      decoration:
+                          BoxDecoration(
+                        color: Colors.white
+                            .withOpacity(
+                          0.05,
+                        ),
+
+                        borderRadius:
+                            BorderRadius.circular(
+                          32,
+                        ),
+
+                        border: Border.all(
+                          color: Colors.white
+                              .withOpacity(
+                            0.08,
+                          ),
+                        ),
+
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors
+                                .black
+                                .withOpacity(
+                              0.25,
+                            ),
+
+                            blurRadius: 24,
+                          ),
+                        ],
+                      ),
+
+                      child: Column(
+                        children: [
+                          // USERNAME
+                          CustomTextField(
+                            controller:
+                                usernameController,
+
+                            hintText:
+                                'Username',
+
+                            prefixIcon:
+                                Icons.person,
+                          ),
+
+                          const SizedBox(
+                            height:
+                                AppSizes.lg,
+                          ),
+
+                          // PASSWORD
+                          CustomTextField(
+                            controller:
+                                passwordController,
+
+                            hintText:
+                                'Password',
+
+                            prefixIcon:
+                                Icons.lock,
+
+                            obscureText:
+                                true,
+                          ),
+
+                          const SizedBox(
+                            height:
+                                AppSizes.xxl,
+                          ),
+
+                          // LOGIN BUTTON
+                          CustomButton(
+                            text: 'Login',
+
+                            onPressed: login,
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const Spacer(),
                   ],
                 ),
               ),
-
-              const Spacer(),
-
-              // USERNAME
-              CustomTextField(
-                hintText: 'Username',
-                controller: usernameController,
-                prefixIcon: Icons.person_outline_rounded,
-              ),
-
-              const SizedBox(height: AppSizes.md),
-
-              // PASSWORD
-              CustomTextField(
-                hintText: 'Password',
-                controller: passwordController,
-                prefixIcon: Icons.lock_outline_rounded,
-                obscureText: true,
-              ),
-
-              const SizedBox(height: AppSizes.xl),
-
-              // BUTTON
-              CustomButton(
-                text: 'Login',
-                icon: Icons.arrow_forward_rounded,
-                onPressed: login,
-              ),
-
-              const SizedBox(height: AppSizes.xxl),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

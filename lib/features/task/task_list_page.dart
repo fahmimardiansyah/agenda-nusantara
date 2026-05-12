@@ -7,6 +7,7 @@ import '../../core/constants/app_sizes.dart';
 import '../../providers/todo_provider.dart';
 
 import 'add_task_page.dart';
+import '../../core/utils/app_page_transition.dart';
 
 class TaskListPage extends StatefulWidget {
   const TaskListPage({super.key});
@@ -32,9 +33,7 @@ class _TaskListPageState extends State<TaskListPage> {
     final todos = provider.todos;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Your Tasks'),
-      ),
+      appBar: AppBar(title: const Text('Your Tasks')),
       body: SafeArea(
         child: todos.isEmpty
             ? _buildEmptyState()
@@ -97,9 +96,7 @@ class _TaskListPageState extends State<TaskListPage> {
                           Navigator.push(
                             context,
 
-                            MaterialPageRoute(
-                              builder: (_) => AddTaskPage(todo: todo),
-                            ),
+                            AppPageTransition(page: AddTaskPage(todo: todo)),
                           );
                         },
 

@@ -6,51 +6,40 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_sizes.dart';
 
 import '../auth/login_page.dart';
+import '../../core/utils/app_page_transition.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 
   @override
-  State<SplashPage> createState() =>
-      _SplashPageState();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState
-    extends State<SplashPage> {
+class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
 
-    Timer(
-      const Duration(seconds: 3),
-      () {
-        Navigator.pushReplacement(
-          context,
+    Timer(const Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+        context,
 
-          MaterialPageRoute(
-            builder:
-                (_) => const LoginPage(),
-          ),
-        );
-      },
-    );
+        AppPageTransition(page: const LoginPage()),
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          AppColors.background,
+      backgroundColor: AppColors.background,
 
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(
-            AppSizes.xl,
-          ),
+          padding: const EdgeInsets.all(AppSizes.xl),
 
           child: Column(
-            mainAxisAlignment:
-                MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
 
             children: [
               // =========================
@@ -61,23 +50,15 @@ class _SplashPageState
                 height: 140,
 
                 decoration: BoxDecoration(
-                  gradient:
-                      const LinearGradient(
-                    colors: [
-                      Color(0xFF8B5CF6),
-                      Color(0xFF6D28D9),
-                    ],
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF8B5CF6), Color(0xFF6D28D9)],
                   ),
 
-                  borderRadius:
-                      BorderRadius.circular(
-                    40,
-                  ),
+                  borderRadius: BorderRadius.circular(40),
 
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primary
-                          .withOpacity(0.4),
+                      color: AppColors.primary.withOpacity(0.4),
 
                       blurRadius: 30,
                       spreadRadius: 4,
@@ -94,9 +75,7 @@ class _SplashPageState
                 ),
               ),
 
-              const SizedBox(
-                height: AppSizes.xxl,
-              ),
+              const SizedBox(height: AppSizes.xxl),
 
               // =========================
               // TITLE
@@ -104,35 +83,23 @@ class _SplashPageState
               const Text(
                 'Agenda Nusantara',
 
-                style: TextStyle(
-                  fontSize: 34,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
               ),
 
-              const SizedBox(
-                height: AppSizes.sm,
-              ),
+              const SizedBox(height: AppSizes.sm),
 
               const Text(
                 'Modern Productivity App',
 
-                style: TextStyle(
-                  color: AppColors.grey,
-                  fontSize: 16,
-                ),
+                style: TextStyle(color: AppColors.grey, fontSize: 16),
               ),
 
-              const SizedBox(
-                height: 80,
-              ),
+              const SizedBox(height: 80),
 
               // =========================
               // LOADING
               // =========================
-              const CircularProgressIndicator(
-                color: AppColors.primary,
-              ),
+              const CircularProgressIndicator(color: AppColors.primary),
             ],
           ),
         ),

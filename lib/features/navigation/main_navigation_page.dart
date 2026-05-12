@@ -7,6 +7,7 @@ import '../home/home_page.dart';
 import '../settings/settings_page.dart';
 import '../task/add_task_page.dart';
 import '../task/task_list_page.dart';
+import '../../core/utils/app_page_transition.dart';
 
 class MainNavigationPage extends StatefulWidget {
   const MainNavigationPage({super.key});
@@ -46,11 +47,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
       // FAB
       floatingActionButton: GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-
-            MaterialPageRoute(builder: (_) => const AddTaskPage()),
-          );
+          Navigator.push(context, AppPageTransition(page: const AddTaskPage()));
         },
 
         child: Container(

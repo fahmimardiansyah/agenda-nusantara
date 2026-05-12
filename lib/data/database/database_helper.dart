@@ -28,6 +28,7 @@ class DatabaseHelper {
     String filePath,
   ) async {
     final dbPath = await getDatabasesPath();
+    print('DATABASE PATH: $dbPath');
 
     final path = join(dbPath, filePath);
 
