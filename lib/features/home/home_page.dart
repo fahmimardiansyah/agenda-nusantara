@@ -9,6 +9,7 @@ import '../../core/constants/app_sizes.dart';
 
 import '../../providers/todo_provider.dart';
 import '../../core/widgets/app_press_animation.dart';
+import '../task/add_task_page.dart';
 
 class HomePage extends StatefulWidget {
   final Function(int) onTabChange;
@@ -145,13 +146,62 @@ class _HomePageState extends State<HomePage> {
 
               Row(
                 children: [
+                  // IMPORTANT
+                  Expanded(
+                    child: _buildFeatureCard(
+                      icon: Icons.priority_high_rounded,
+
+                      title: 'Important',
+
+                      color: AppColors.danger,
+
+                      onTap: () {
+                        Navigator.push(
+                          context,
+
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                const AddTaskPage(initialCategory: 'important'),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+                  const SizedBox(width: AppSizes.md),
+
+                  // REGULAR
                   Expanded(
                     child: _buildFeatureCard(
                       icon: Icons.task_alt_rounded,
 
-                      title: 'Tasks',
+                      title: 'Regular',
 
                       color: AppColors.primary,
+
+                      onTap: () {
+                        Navigator.push(
+                          context,
+
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                const AddTaskPage(initialCategory: 'regular'),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+                  const SizedBox(width: AppSizes.md),
+
+                  // TASK LIST
+                  Expanded(
+                    child: _buildFeatureCard(
+                      icon: Icons.list_alt_rounded,
+
+                      title: 'Task',
+
+                      color: AppColors.secondary,
 
                       onTap: () {
                         widget.onTabChange(1);
@@ -161,43 +211,15 @@ class _HomePageState extends State<HomePage> {
 
                   const SizedBox(width: AppSizes.md),
 
-                  Expanded(
-                    child: _buildFeatureCard(
-                      icon: Icons.calendar_month_rounded,
-
-                      title: 'Calendar',
-
-                      color: AppColors.secondary,
-                      onTap: () {
-                        widget.onTabChange(2);
-                      },
-                    ),
-                  ),
-
-                  const SizedBox(width: AppSizes.md),
-
-                  Expanded(
-                    child: _buildFeatureCard(
-                      icon: Icons.bolt_rounded,
-
-                      title: 'Focus',
-
-                      color: AppColors.success,
-                      onTap: () {
-                        // Handle Focus feature tap
-                      },
-                    ),
-                  ),
-
-                  const SizedBox(width: AppSizes.md),
-
+                  // SETTINGS
                   Expanded(
                     child: _buildFeatureCard(
                       icon: Icons.settings_rounded,
 
                       title: 'Settings',
 
-                      color: AppColors.danger,
+                      color: AppColors.warning,
+
                       onTap: () {
                         widget.onTabChange(3);
                       },
@@ -205,7 +227,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-
               const SizedBox(height: AppSizes.xxl),
 
               // TASK OVERVIEW
@@ -757,27 +778,18 @@ class _HomePageState extends State<HomePage> {
       onTap: onTap,
 
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: AppSizes.lg,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: AppSizes.lg),
 
         decoration: BoxDecoration(
           color: AppColors.card,
 
-          borderRadius:
-              BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(22),
 
-          border: Border.all(
-            color: Colors.white.withOpacity(
-              0.05,
-            ),
-          ),
+          border: Border.all(color: Colors.white.withOpacity(0.05)),
 
           boxShadow: [
             BoxShadow(
-              color: color.withOpacity(
-                0.08,
-              ),
+              color: color.withOpacity(0.08),
 
               blurRadius: 18,
               spreadRadius: 1,
@@ -788,24 +800,16 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(
-                AppSizes.sm,
-              ),
+              padding: const EdgeInsets.all(AppSizes.sm),
 
               decoration: BoxDecoration(
                 color: color.withOpacity(0.15),
 
-                borderRadius:
-                    BorderRadius.circular(
-                  14,
-                ),
+                borderRadius: BorderRadius.circular(14),
 
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primary
-                        .withOpacity(
-                      0.35,
-                    ),
+                    color: AppColors.primary.withOpacity(0.35),
 
                     blurRadius: 18,
                     spreadRadius: 1,
@@ -813,25 +817,15 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
 
-              child: Icon(
-                icon,
-                color: Colors.white,
-                size: 22,
-              ),
+              child: Icon(icon, color: Colors.white, size: 22),
             ),
 
-            const SizedBox(
-              height: AppSizes.sm,
-            ),
+            const SizedBox(height: AppSizes.sm),
 
             Text(
               title,
 
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight:
-                    FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
             ),
           ],
         ),

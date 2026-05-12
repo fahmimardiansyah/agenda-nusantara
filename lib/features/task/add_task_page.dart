@@ -15,9 +15,12 @@ import '../../providers/todo_provider.dart';
 class AddTaskPage extends StatefulWidget {
   final TodoModel? todo;
 
+  final String? initialCategory;
+
   const AddTaskPage({
     super.key,
     this.todo,
+    this.initialCategory,
   });
 
   @override
@@ -36,7 +39,7 @@ class _AddTaskPageState
   DateTime? selectedDate;
 
   String selectedCategory =
-      'important';
+      'regular';
 
   bool get isEditMode =>
       widget.todo != null;
@@ -48,6 +51,7 @@ class _AddTaskPageState
   void initState() {
     super.initState();
 
+    // EDIT MODE
     if (isEditMode) {
       titleController.text =
           widget.todo!.title;
@@ -61,6 +65,13 @@ class _AddTaskPageState
       selectedDate = DateFormat(
         'dd MMM yyyy',
       ).parse(widget.todo!.dueDate);
+    }
+
+    // ADD MODE FROM QUICK FEATURE
+    else {
+      selectedCategory =
+          widget.initialCategory ??
+              'regular';
     }
   }
 
@@ -376,7 +387,7 @@ class _AddTaskPageState
 
                       color: isImportant
                           ? AppColors.danger
-                          : AppColors.success,
+                          : AppColors.primary,
                     ),
 
                     const SizedBox(

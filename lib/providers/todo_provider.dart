@@ -5,6 +5,12 @@ import '../data/models/todo_model.dart';
 
 class TodoProvider extends ChangeNotifier {
   final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
+  String quickCategory = 'regular';
+
+void setQuickCategory(String category) {
+  quickCategory = category;
+  notifyListeners();
+}
 
   List<TodoModel> _todos = [];
 

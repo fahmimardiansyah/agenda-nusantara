@@ -234,7 +234,7 @@ class _SettingsPageState
                     const SizedBox(width: 12),
 
                     const Text(
-                      'Important Task',
+                      'Important Task (Tugas Penting)',
                     ),
                   ],
                 ),
@@ -257,7 +257,7 @@ class _SettingsPageState
                     const SizedBox(width: 12),
 
                     const Text(
-                      'Regular Task',
+                      'Regular Task (Tugas Biasa)',
                     ),
                   ],
                 ),
